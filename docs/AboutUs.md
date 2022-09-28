@@ -8,7 +8,6 @@ You can reach us at the email `peiyee88@nus.edu.sg` or `xxxxx@nus.edu.sg`
 
 <img src="images/peiyee88.png" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
 [[github](https://github.com/peiyee88)]
 [[portfolio](team/peiyee88.md)]
 
