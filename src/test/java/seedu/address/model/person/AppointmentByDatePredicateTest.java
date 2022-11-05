@@ -15,16 +15,7 @@ import seedu.address.testutil.PersonBuilder;
 
 public class AppointmentByDatePredicateTest {
     @Test
-    public void constructor_successful() {
-        assertTrue(() -> {
-            new AppointmentByDatePredicate(
-                    Arrays.asList(LocalDate.of(1212, Month.DECEMBER, 12)));
-            return true;
-        });
-    }
-
-    @Test
-    public void equalsTest() {
+    public void equals() {
         List<LocalDate> firstPredicateKeywordList = Collections.singletonList(LocalDate.of(2006, Month.AUGUST, 12));
         List<LocalDate> secondPredicateKeywordList = Arrays.asList(LocalDate.of(2012, Month.APRIL, 20),
                 LocalDate.of(2001, Month.APRIL, 24));
@@ -45,46 +36,32 @@ public class AppointmentByDatePredicateTest {
         // null -> returns false
         assertFalse(firstPredicate.equals(null));
 
-        // different date -> returns false
+        // different person -> returns false
         assertFalse(firstPredicate.equals(secondPredicate));
     }
 
     @Test
-    public void test_appointmentByDatePredicate_returnsTrue() {
+    public void test_appointmentByDateContainsKeywords_returnsTrue() {
         AppointmentByDatePredicate predicate =
-                new AppointmentByDatePredicate(Collections.singletonList(LocalDate.of(2030, Month.AUGUST, 12)));
-        //with only upcoming appointments
-        assertTrue(predicate.test(new PersonBuilder().withUpcomingAppointment("12-08-2030").build()));
+                new AppointmentByDatePredicate(Collections.singletonList(LocalDate.of(2006, Month.AUGUST, 12)));
+        //test upcoming appointments
+        assertTrue(predicate.test(new PersonBuilder().withUpcomingAppointment("12-08-2006").build()));
 
-        //with only past appointments
+        //test past appointments
         predicate = new AppointmentByDatePredicate(Collections.singletonList(LocalDate.of(2006, Month.AUGUST, 12)));
         String[] pastAppointmentsDetails = {"12-08-2006", "ibuprofen", "headache"};
         assertTrue(predicate.test(new PersonBuilder().withPastAppointment(pastAppointmentsDetails).build()));
-
-        //with upcoming appointment and past appointments
-        predicate = new AppointmentByDatePredicate(Collections.singletonList(LocalDate.of(2024, Month.JUNE, 12)));
-        String[] pastAppointments = {"12-08-2009", "panadol", "headache"};
-        assertTrue(predicate.test(
-                new PersonBuilder().withPastAppointment(
-                        pastAppointments).withUpcomingAppointment("12-06-2024").build()));
     }
 
     @Test
-    public void test_appointmentByDatePredicate_returnsFalse() {
-        String[] pastAppointments = {"12-08-2006", "panadol", "headache"};
+    public void test_nameDoesNotContainKeywords_returnsFalse() {
         // Zero keywords
-        AppointmentByDatePredicate predicate =
-                new AppointmentByDatePredicate(Collections.emptyList());
-        assertFalse(predicate.test(
-                new PersonBuilder().withPastAppointment(
-                        pastAppointments).withUpcomingAppointment("12-12-2030").build()));
+        AppointmentByDatePredicate predicate = new AppointmentByDatePredicate(Collections.emptyList());
+        assertFalse(predicate.test(new PersonBuilder().withUpcomingAppointment("12-12-1212").build()));
 
         // Non-matching keyword
-        predicate = new AppointmentByDatePredicate(
-                Arrays.asList(LocalDate.of(2012, Month.APRIL, 20),
-                        LocalDate.of(2001, Month.APRIL, 24)));
-        assertFalse(predicate.test(
-                new PersonBuilder().withPastAppointment(
-                        pastAppointments).withUpcomingAppointment("12-12-2030").build()));
+        predicate = new AppointmentByDatePredicate(Arrays.asList(LocalDate.of(2012, Month.APRIL, 20),
+                LocalDate.of(2001, Month.APRIL, 24)));
+        assertFalse(predicate.test(new PersonBuilder().withUpcomingAppointment("12-12-1220").build()));
     }
 }
